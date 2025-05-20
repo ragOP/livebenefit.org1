@@ -30,6 +30,7 @@ const Raghib = () => {
   const [countdown, setCountdown] = useState({ minutes: "05", seconds: "00" });
   const [progressValue, setProgressValue] = useState(100);
   const [pass, setPass] = useState(false);
+    const [isYesOption, setIsYesOption] = useState(true);
 
   const scrollToBottom = () => {
     const chatContainer = document.querySelector('.chat_section');
@@ -55,30 +56,23 @@ const Raghib = () => {
     </div>
   );
 
-  const handleYesClick = () => {
+const handleYesClick = () => {
     setShowBottomSection(true);
+    setTypingStates(prev => ({ ...prev, msg1: true }));
     setTimeout(() => {
-      setTypingStates(prev => ({ ...prev, msg1: true }));
-
-      setTimeout(() => {
         setTypingStates(prev => ({ ...prev, msg1: false }));
-        setMessages(prev => ({ ...prev, msg1: true }));
-        setTypingStates(prev => ({ ...prev, msg6: true }));
-        
+       setMessages(prev => ({ ...prev, msg6: true }));
         setTimeout(() => {
-          setTypingStates(prev => ({ ...prev, msg6: false }));
-          setMessages(prev => ({ ...prev, msg6: true}));
-          setTimeout(() => {
+            setTypingStates(prev => ({ ...prev, msg6: false }));
+            setMessages(prev => ({ ...prev, msg6: true }));
             setTypingStates(prev => ({ ...prev, msg7: true }));
-            setTimeout(() => {
-              setTypingStates(prev => ({ ...prev, msg7: false }));
-              setMessages(prev => ({ ...prev, msg7: true }));
-            }, 500);
-          }, 500);
+                setTimeout(() => {
+                    setTypingStates(prev => ({ ...prev, msg7: false }));
+                    setMessages(prev => ({ ...prev, msg7: true }));
+                }, 500);
         }, 500);
-      }, 500);
-    }, 500);
-  };
+    }, 1000);
+};
 
   const handleStep2Click = () => {
     setMessages(prev => ({ ...prev, msg8: true}));
@@ -90,11 +84,12 @@ const Raghib = () => {
       setTimeout(() => {  
         setTypingStates(prev => ({ ...prev, msg9: false }));
         setMessages(prev => ({ ...prev, msg9: true }));
-      }, 1000);
-    }, 1000);
+      }, 1500);
+    }, 1500);
   };
 
   const handleStep3Click = (isNo) => {
+    setIsYesOption(!isNo);
     setTypingStates(prev => ({ ...prev, msg10: true }));
 
     const messageSequence = [
@@ -106,7 +101,13 @@ const Raghib = () => {
     ];
 
     if (isNo) {
-      window.location.href = "https://rtk.trk.healthsecuritynow.com/click/2";
+        setMessages(prev => ({ ...prev, msg10: true }));
+        console.log('Setting timeout for redirect...');
+       setTimeout(() => {
+        console.log('Redirecting to Google...');
+           window.location.href = "https://google.com";
+       }, 2000);
+         return;
     }
 
     let totalDelay = 0;
@@ -304,7 +305,16 @@ const Raghib = () => {
                       <div className="recipient-header">
                         <div className="recipient-cont">
                           <p className="opt-heading2">
-                            <span>YES</span> <img src={receiptIcon} width="50" height="50" alt="ic" />
+                            {isYesOption && (
+                              <>
+                                <span>YES</span> <img src={receiptIcon} width="50" height="50" alt="ic" />
+                              </>
+                            )}
+                            {!isYesOption && (
+                              <>
+                                <span>NO</span> <img src={receiptIcon} width="50" height="50" alt="ic" />
+                              </>
+                            )}
                           </p>
                         </div>
                       </div>
